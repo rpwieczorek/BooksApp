@@ -18,8 +18,6 @@ const templates = {
 const favoriteBooks = [];
 const filters = [];
 
-
-
 function initAction(){
   //eventListener for adding book to favoriteBooks
   document.querySelector(select.bookContainer).addEventListener('dblclick',function(event){
@@ -62,7 +60,7 @@ function filterBooks(){
         break;
       }
     }
-    booksDOM = document.querySelectorAll(select.bookImage);
+    const booksDOM = document.querySelectorAll(select.bookImage);
 
     if (shouldBeHidden) {
       for(let bookDOM of booksDOM){
@@ -83,11 +81,31 @@ function filterBooks(){
 
 function renderBooks(){
   for(let eachBook in dataSource.books){
+    const ratingBgc = determineRatingBgc(dataSource.books[eachBook].rating);
+    const ratingWidth = dataSource.books[eachBook].rating*10;
+    dataSource.books[eachBook].ratingBgc = ratingBgc;
+    dataSource.books[eachBook].ratingWidth = ratingWidth;
     const generatedHTML = templates.eachBook(dataSource.books[eachBook]);
     const eachBookDOM = utils.createDOMFromHTML(generatedHTML);
     const bookContainer = document.querySelector(select.bookContainer);
     bookContainer.appendChild(eachBookDOM);
   }
+}
+
+function determineRatingBgc(rating){
+  if (rating < 6) {
+    return 'linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%);';
+  }
+  else if (rating > 6 && rating <= 8) {
+    return 'linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%);';
+  }
+  else if (rating > 8 && rating <= 9) {
+    return 'linear-gradient(to bottom, #299a0b 0%, #299a0b 100%';
+  }
+  else if (rating >9) {
+    return 'linear-gradient(to bottom, #ff0084 0%,#ff0084 100%);';
+  }
+  console.log('ustalam rating');
 }
 
 renderBooks();
